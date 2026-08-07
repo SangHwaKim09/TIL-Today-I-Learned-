@@ -6,3 +6,58 @@
 -극좌표를 직교좌표로 변환한다.
 -반복문 버전과 벡터화 버전의 속도를 비교한다.
 
+참고 : 모든 과정은 jupyter notebook환경 내에서 진행되었다.
+
+step을 6단계로 나누어 데이터를 전처리하고 연산을 통해 필터링하고 최종적으로 최대 거리를 계산하였다.
+
+step0
+로컬노트북에서 python을 실행하지 않고 .venv를 통해 가상환경에 python을 설치하여 이곳에서 실습을 진행한다.
+
+numpy와 matplotlib을 import하여 데이터의 전처리를 준비한다.
+
+코드
+ng    = np.random.default_rng(0)          # 시드 고정 - 재현 가능한 실습
+scan   = rng.random(360) * 12              # 각도별 거리 [m], 0~12
+angles = np.linspace(0, 2*np.pi, 360)      # 각 측정의 각도 [rad]
+
+print('scan  :', scan.shape, scan.dtype)
+print('angles:', angles.shape)
+print('처음 5개 거리:', np.round(scan[:5], 3))
+
+실행결과
+scan  : (360,) float64
+angles: (360,)
+처음 5개 거리: [7.644 3.237 0.492 0.198 9.759]
+
+step1
+스캔을 통해 얻은 거리 데이터를 유효한 값만 남기는 전처리 작업을 진행하였다.
+step1에서 scan을 통해 얻은 거리값중 0.1m를 초과하고 10m미만인 값을 True로 반환하는 불리언 배열을 만들고 mask변수에 저장한다.
+이 과정에서 유효한 배열만 남겨 valid라는 변수에 저장한다.
+
+코드
+mask  = (scan > 0.1) & (scan < 10.0)
+valid = scan[mask]
+ratio = mask.mean()
+
+print(valid.shape, f'유효 비율 {ratio:.3f}')
+
+실행결과
+(284,) 유효 비율 0.789
+
+코드를 실행한 결과 mask의 내용이 정확하게 출력되어 유효 비율의 평균값이 출력되었다.
+
+step2
+유효한 측정값들중 가장 가까운 것의 거리와 그 각도를 찾는다.
+
+코드
+ear_dist = valid.min()
+near_deg  = np.degrees(angles[mask][np.argmin(valid)]) 
+
+print(f'최근접 {near_dist:.3f} m @ {near_deg:.1f} deg')
+
+실행결과
+최근접 0.119 m @ 150.4 deg
+
+이렇게 랜덤으로 생성된 위치값들 중에서 센서와 가장 가까운 거리값을 반환한다.
+
+step3
