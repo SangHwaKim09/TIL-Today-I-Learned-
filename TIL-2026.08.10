@@ -1,0 +1,94 @@
+git 로컬 폴더에 C++컴파일러 설치
+
+#include <iostream> #표준입출력을 사용할 수 있게 해주는 헤더파일
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+} 
+
+return0 : 이 기능이 정상적으로 작동한다.
+
+터미널 명령어 : g++ -Wall -Wextra -std=c++17 -o hello ./test.cpp 
+
+
+short는 변수타입중에 하나 2byte정도 크기의 정수
+unsigned값은 음수를 사용하지 않겠다. 로봇의 넘버, 데이터베이스의 아이디등 음수가 되면 안되는 값에 주로 쓴다.
+
+수정을 할때마다 ctrl+s를 이용하여 저장을 해주고 빌드를 한뒤에 실행을 시켜야 변경사항이 적용되어 실행된다.
+
+float, double : 실수형 변수타입
+로봇을 개발할때는 되도록 double을 사용한다. 
+
+#include <string>
+
+const : 상수형 변수타입 
+어떠한 변수의 값을 고정하는데 사용되는 타입명이다.
+constexpr : 컴파일하면 절대 바뀌지 않는 값
+auto : 뒤에오는 변수의 타입명을 자동으로 감지하는 역할을 하는데 쓰지않는것을 추천
+
+변수의 범위
+{} 괄호 안과 밖에서 같은 변수명 num을 사용하여 서로 다른 값을 지정해주었을 때, 출력할때도 num의 값이 서로 다르게 두번 출력된다.
+
+sqrt : 두 점 사이의 거리를 계산해주는 함수
+
+while() : while안의 값의 조건에 따라 참일경우 이 반복문의 내용을 계속해서 수행한다. 1을 넣으면 재귀에 빠져 강제로 kill을 해야만 하는 경우가 생기기 때문에 주의해야 한다.
+
+
+
+#include <iostream>
+#include <cmath>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+int divide(int a, int b) {
+    if (b == 0) {
+        std::cerr << "Error: Division by zero!" << std::endl;
+        return 0; // Return 0 or handle the error as needed
+    }
+    return a / b;
+}
+
+
+int main() {
+    int num1, num2;
+    char type;
+    
+    std::cout << "Enter two integers: ";
+    std::cin >> num1 >> num2;
+
+    std::cout << "Enter the operation (+, -, *, /): ";
+    std::cin >> type;
+
+    int result;
+    switch (type) {
+        case '+':
+            result = add(num1, num2);
+            break;
+        case '-':
+            result = subtract(num1, num2);
+            break;
+        case '*':
+            result = multiply(num1, num2);
+            break;
+        case '/':
+            result = divide(num1, num2);
+            break;
+        default:
+            std::cerr << "Error: Invalid operation!" << std::endl;
+            return 1;
+    }
+
+    std::cout << "Result: " << result << std::endl;
+
+    return 0;
+}
